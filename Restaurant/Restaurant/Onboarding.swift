@@ -15,35 +15,42 @@ struct Onboarding: View {
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var email: String = ""
+    @State var isLoggedIn: Bool = false
     
     var body: some View {
-        VStack {
-    
-            TextField("First Name", text: $firstName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            TextField("Last Name", text: $lastName)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            
-            TextField("Email", text: $email)
-             .textFieldStyle(RoundedBorderTextFieldStyle())
-            Button(action: {
-                if firstName.isEmpty && lastName.isEmpty && email.isEmpty {
-                    UserDefaults.standard.set(firstName, forKey: userFirstNameKey)
-                    UserDefaults.standard.set(lastName, forKey: userLastNameKey)
-                    if isValid(email) {
-                        UserDefaults.standard.set(email, forKey: userEmailKey)
-                    }
-                    
-                }else {
-                    return
+        NavigationView {
+            VStack {
+                NavigationLink(destination: Home(), isActive: $isLoggedIn) {
+                    EmptyView()
                 }
-            }, label: {
-                Text("Register")
-            })
-            
-        }
         
+                TextField("First Name", text: $firstName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                TextField("Last Name", text: $lastName)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                TextField("Email", text: $email)
+                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                
+                Button(action: {
+ 
+                    if !firstName.isEmpty && !lastName.isEmpty && !email.isEmpty && isValid(email) {
+                        UserDefaults.standard.set(firstName, forKey: userFirstNameKey)
+                        UserDefaults.standard.set(lastName, forKey: userLastNameKey)
+                        UserDefaults.standard.set(email, forKey: userEmailKey)
+                        isLoggedIn = true
+
+                    } else {
+                        return
+                    }
+                }, label: {
+                    Text("Register")
+                })
+                
+            }
+        }
     }
     
     func isValid(_ email: String) -> Bool {
