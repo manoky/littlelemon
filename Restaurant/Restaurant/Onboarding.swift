@@ -16,6 +16,7 @@ struct Onboarding: View {
     @State private var lastName: String = ""
     @State private var email: String = ""
     @State var isLoggedIn: Bool = false
+    let kIsLoggedIn = "kIsLoggedIn"
     
     var body: some View {
         NavigationView {
@@ -40,6 +41,7 @@ struct Onboarding: View {
                         UserDefaults.standard.set(firstName, forKey: userFirstNameKey)
                         UserDefaults.standard.set(lastName, forKey: userLastNameKey)
                         UserDefaults.standard.set(email, forKey: userEmailKey)
+                        UserDefaults.standard.set(true, forKey: kIsLoggedIn)
                         isLoggedIn = true
 
                     } else {
@@ -49,6 +51,10 @@ struct Onboarding: View {
                     Text("Register")
                 })
                 
+            }
+        }.onAppear() {
+            if(UserDefaults.standard.bool(forKey: kIsLoggedIn)) {
+                isLoggedIn = true
             }
         }
     }
